@@ -5,54 +5,69 @@ from math import *
 from re import *
 from sympy import *
 
+__test__={}
+
 x=symbols('x')
 
-class RandomPolynomial(object):
+class Polynomial(object):
 	"""
-	Class: RandomPolynomial
+	Class: Polynomial
 	
-	Represents a polynomial of one variable with random coefficients from -10 to 10.
+	Represents a polynomial of one variable with random coefficients from -10 to 10.  The class exists sololy to print out polynomials in a readable format.
 	"""
 
-	def __init__(self, degree=None, coefficients=None):
+	def __init__(self, poly):
 		"""
-		Invocation: RandomPolynomial(degree)
-		Meaning: Construct a polynomial object of given degree, if no degree is  specified a random degree between zero and 3 is chosen with degrees 1 and 2 most likely.  Coefficients are randomly selected integers between -10 and 10.
-		Preconditions: Degree is a non negative integer or not supplied.
-		Postconditions: A polynomial of given degree is returned with randomly selected coefficients. If no degree is  specified a random degree between zero and 3 is chosen with degrees 1 and 2 most likely.
+		Invocation: Polynomial(degree)
+		Meaning: Take a sympy.expression and turn it into a polynomial object for printing.
+		Preconditions: None. 
+		Postconditions: Returns a polynomial object.
 		"""	
-		if degree== None:
-			degree=int(round(random.triangular(-0.4,3.4,1.7),1))
-		if type(degree) != int:
-			raise ValueError('Degree must be an integer but instead was' + repr(type(degree)))
-		polynomial=0
-		if coefficients==None:
-			coefficients= [0]*(degree+1)
-			for n in range (degree+1):
-				coefficients[n]= random.randint(-10,10)	
-				polynomial+= coefficients[n]*x**n
-		self.polynomial = polynomial
+		self.polynomial = poly
 
 	"""
 	Field: polynomial
 	Type: String
-	Meaning:
-	Invariants:
+	Meaning: This is the string representation of a polynomial in python format.
+	Invariants: None.
 	"""
 	
 	def __repr__(self):
+		"""
+		>>> from math import *
+		>>> from re import *
+		>>> from sympy import *
+		>>> Polynomial(x**2 + 3*x + 2)
+		x^2 + 3x + 2
+		"""
 		exponent = compile('\*\*')
 		carrots = exponent.sub('^', repr(self.polynomial))
 		multiplication = compile('\*')
 		prettypoly = multiplication.sub('', carrots)
 		return prettypoly
 			
+affirmative=['Y','y','yes', 'YES', 'Yes']  #list of strings accepted as yes
+negatory= ['N', 'n', 'no', 'NO', 'No']  #list of strings accepted as no
+
+def makepoly():
+	degree=int(round(random.triangular(0.3,3.4,1.7),1))
+	polynomial=0
+	coefficients= [0]*(degree+1)
+	for n in range (degree+1):
+		coefficients[n]= random.randint(-10,10)	
+		polynomial+= coefficients[n]*x**n
+	if degree==0 and coefficients==[0]:
+		polynomial=makepoly() #If polynomial is 0 find new polynomial
+	return polynomial
+	"""
+	generates a string representing a random polynomial
+	"""
 def definefactoring():
 	while True:
 		factor=raw_input('do you want factoring problems? (Y/N)')
-		if factor=='Y':
+		if factor in affirmative:
 			return True
-		elif factor=='N':
+		elif factor in negatory:
 			return False
 		else:
 			print 'Invalid response, reply Y or N'
@@ -75,9 +90,9 @@ def definenumberoffactoring():
 def definepolynomialadd():
 	while True:
 		add=raw_input('do you want polynomial addition problems? (Y/N)')
-		if add =='Y':
+		if add in affirmative:
 			return True
-		if add=='N':
+		if add in negatory:
 			return False
 		else:
 			print 'Invalid response, reply Y or N'
@@ -97,15 +112,13 @@ def definenumberofaddition():
 		"""
 		Requests the user inputs an integer between 0 and 5 to be the number of addition problems outputted, returns the integer.
 		"""
-
-#def makeadditionproblem():
 		
 def definepolynomialmultiplication():
 	while True:
 		mult=raw_input('do you want polynomial multiplication problems? (Y/N)')
-		if mult=='Y':
+		if mult in affirmative:
 			return True
-		if mult=='N':
+		if mult in negatory:
 			return False
 		else:
 			print 'Invalid response, reply Y or N'
@@ -126,35 +139,35 @@ def definenumberofmultiplication():
 		Requests the user inputs an integer between 0 and 5 to be the number of multiplication problems outputted, returns the integer.
 		"""
 
-
+#PROGRAM:
 factor=definefactoring()
 if factor:
 	nfactor=definenumberoffactoring()
 	for i in range(nfactor):
-		a=RandomPolynomial()
-		b=RandomPolynomial()
-		print 'problem:', expand(a.polynomial*b.polynomial)
-		print 'solution:', '(', a, ')(', b, ')'
+		a=makepoly()
+		b=makepoly()
+		print 'problem:', Polynomial(expand(a*b))
+		print 'solution:', '(', Polynomial(a), ')(', Polynomial(b), ')'
 		print ' ' #prints a blank line
 
 add=definepolynomialadd()
 if add:
 	nadd=definenumberofaddition()
 	for i in range (nadd):
-		a=RandomPolynomial()
-		b=RandomPolynomial()
-		print 'problem:', a, '+', b 
-		print 'solution:', simplify(a.polynomial+b.polynomial)
+		a=makepoly()
+		b=makepoly()
+		print 'problem: (', Polynomial(a), ') + (', Polynomial(b), ')'
+		print 'solution:', Polynomial(simplify(a+b))
 		print ' ' #prints a blank line
  
 mult=definepolynomialmultiplication()
 if mult:
 	nmult=definenumberofmultiplication()
 	for i in range(nmult):
-		a=RandomPolynomial()
-		b=RandomPolynomial()
-		print 'problem: (', a, ')(', b, ')'
-		print 'solution:', expand(a.polynomial*b.polynomial)
+		a=makepoly()
+		b=makepoly()
+		print 'problem: (', Polynomial(a), ')(', Polynomial(b), ')'
+		print 'solution:', Polynomial(expand(a*b))
 		print ' ' #prints a blank line
 
 
