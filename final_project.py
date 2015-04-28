@@ -334,7 +334,7 @@ def runprogram():
 	>>> from math import *
 	>>> from re import *
 	>>> from sympy import *
-	>>> 
+	>>> __main__
 	"""
 	factor=definefactoring()
 	if factor:
