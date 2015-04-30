@@ -58,8 +58,8 @@ def makepoly():
 	>>> from re import *
 	>>> from sympy import *
 	>>> random.triangular = lambda x, y, z: 3.0
-	>>> coefficients= [4, 3, 2, 1]
-	>>> random.randint = lambda high, low: coefficients.pop(0)
+	>>> coefficient= [4, 3, 2, 1]
+	>>> random.randint = lambda high, low: coefficient.pop(0)
 	>>> makepoly()
 	x**3 + 2*x**2 + 3*x + 4
 	"""
@@ -328,13 +328,28 @@ def definenumberofmultiplication():
 #PROGRAM:
 def runprogram():
 	"""
-	This function run the entire program.
+	This function runs the entire program.
 	
 	>>> import random
 	>>> from math import *
 	>>> from re import *
 	>>> from sympy import *
-	>>> __main__
+	>>> import __builtin__
+	>>> random.triangular = lambda x, y, z: 2.0
+	>>> coefficient= [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]
+	>>> random.randint = lambda high, low: coefficient.pop(0)
+	>>> answers = ['yes', '1', 'yes', '1', 'yes', '1']
+	>>> __builtin__.raw_input = lambda message: answers.pop(0)
+	>>> runprogram()
+	problem: 9x^4 + 12x^3 + 10x^2 + 4x + 1
+	solution: ( 3x^2 + 2x + 1 )( 3x^2 + 2x + 1 )
+	<BLANKLINE>
+	problem: ( 3x^2 + 2x + 1 ) + ( 3x^2 + 2x + 1 )
+	solution: 6x^2 + 4x + 2
+	<BLANKLINE>
+	problem: ( 3x^2 + 2x + 1 )( 3x^2 + 2x + 1 )
+	solution: 9x^4 + 12x^3 + 10x^2 + 4x + 1
+	<BLANKLINE>
 	"""
 	factor=definefactoring()
 	if factor:
@@ -366,7 +381,8 @@ def runprogram():
 			print 'solution:', Polynomial(expand(a*b))
 			print ' ' #prints a blank line
 
-runprogram()
+if __name__ == '__main__':
+	runprogram()
 
 # References
 # https://docs.python.org/2/howto/regex.html#regex-howto
